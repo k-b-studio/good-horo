@@ -94,10 +94,11 @@ src/routes/api/oracle/+server.ts    the only server-side code
 ## Commands
 
 ```sh
-npm run dev      # dev server
-npm test         # 35 unit tests (composer, normaliser, guard, gate)
-npm run check    # svelte-check
-npm run build    # production build
+npm run dev              # dev server
+npm test                 # 46 unit tests (composer, normaliser, guard, gate, share)
+npm run check            # svelte-check
+npm run build            # production build
+./tools/regenerate-og.sh # rebuild static/og.jpg (macOS only — uses CoreText)
 ```
 
 Tests cover polarity across 200 readings per mode with zero bank leakage,
@@ -129,8 +130,6 @@ Deploys happen by pushing to GitHub. Do not use the `vercel` CLI.
 
 ## Known gaps
 
-- **No OG image asset.** Meta tags exist; `og:image` does not, so link previews are
-  text-only.
 - **No Safari audit.** WebKit is the primary audit target and the flip plus
   mode-transition animations have not been checked there.
 - **Not visually verified** at 375px, and Thai tone-mark rendering at the largest
