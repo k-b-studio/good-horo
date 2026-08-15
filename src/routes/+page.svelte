@@ -30,7 +30,7 @@
 	/>
 	<!-- Absolute URLs: crawlers do not resolve relative paths, and the canonical home
 	     is kbstudio.space even though the app is served from the good-horo project. -->
-	<meta property="og:title" content="ดูดวงเข้าข้าง" />
+	<meta property="og:title" content="Good Horo" />
 	<meta
 		property="og:description"
 		content="หมอดูที่อยู่ข้างคุณเสมอ — ไพ่ 5 ใบ เลือกใบไหนก็ได้ผลดีเหมือนกัน"
@@ -45,7 +45,7 @@
 	<meta property="og:image:height" content="630" />
 	<meta property="og:image:alt" content="ดูดวงเข้าข้าง — หมอดูที่อยู่ข้างคุณเสมอ" />
 	<meta name="twitter:card" content="summary_large_image" />
-	<meta name="twitter:title" content="ดูดวงเข้าข้าง" />
+	<meta name="twitter:title" content="Good Horo" />
 	<meta
 		name="twitter:description"
 		content="หมอดูที่อยู่ข้างคุณเสมอ — ไพ่ 5 ใบ เลือกใบไหนก็ได้ผลดีเหมือนกัน"
