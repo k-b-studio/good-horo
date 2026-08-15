@@ -27,3 +27,4 @@ vite.config.ts.timestamp-*
 
 # Audit/test tool output — local scratch, never committed
 *.result
+.env*
