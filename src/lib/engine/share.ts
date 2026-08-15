@@ -300,7 +300,7 @@ export async function renderShareCard({
 	ctx.fillStyle = p.muted;
 	drawFitted(
 		ctx,
-		'สร้างมาเพื่อความบันเทิง โปรดใช้จัรกรยานในการรับชม',
+		'สร้างมาเพื่อความบันเทิง โปรดใช้จักรยานในการรับชม',
 		cx,
 		H - PAD,
 		headerWidth,
