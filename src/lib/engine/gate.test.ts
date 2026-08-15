@@ -155,3 +155,34 @@ describe('gate — cultural sensitivity', () => {
 		expect(r.line).toBe('ส้อมจะตกพื้นตอนอาหารเพิ่งมาเสิร์ฟพอดีทุกมื้อ');
 	});
 });
+
+describe('gate — mixed-script contamination', () => {
+	// Captured verbatim from the live production endpoint, 2026-08-15. This passed an
+	// earlier version of the gate: the Thai ratio alone cleared 0.7 despite the line
+	// carrying two English tokens and a CJK character.
+	const PRODUCTION_GARBAGE =
+		'เน็ตหลุดเลยได้ครองแชมป์อัยชายกย่องแห่งชาติNotNil นั่งงงกับราคากรมขนส่งมากกว่ายี้้太 comparisons';
+
+	it('rejects the real mixed-script line that reached production', () => {
+		const r = gate({ text: PRODUCTION_GARBAGE, mode: 'hell' });
+		expect(r.ok).toBe(false);
+	});
+
+	it('rejects a stray CJK character', () => {
+		expect(gate({ text: 'เขาจะเจอเรื่องซวยเล็กๆ ทุกวัน太 อย่างต่อเนื่อง', mode: 'hell' }).reason).toBe(
+			'foreign-script'
+		);
+	});
+
+	it('rejects leaked English words', () => {
+		expect(gate({ text: 'เขาจะเจอเรื่องซวย comparisons ทุกวันอังคารเลย', mode: 'hell' }).reason).toBe(
+			'latin-word'
+		);
+	});
+
+	it('still allows short latin fragments like a percentage', () => {
+		expect(gate({ text: 'แบตจะเหลือ 1% ตอนกำลังจะสแกนจ่ายเงินพอดีทุกครั้ง', mode: 'hell' }).ok).toBe(
+			true
+		);
+	});
+});

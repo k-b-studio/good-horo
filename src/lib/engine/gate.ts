@@ -23,6 +23,8 @@ export type GateReason =
 	| 'empty'
 	| 'truncated'
 	| 'not-thai'
+	| 'foreign-script'
+	| 'latin-word'
 	| 'preamble'
 	| 'emoji'
 	| 'too-short'
@@ -157,8 +159,22 @@ export function gate({ text, mode, finishReason, bankLines = [] }: GateInput): G
 
 	if (!line) return fail('empty');
 	if (PREAMBLE.some((re) => re.test(line))) return fail('preamble');
-	if (thaiRatio(line) < MIN_THAI_RATIO) return fail('not-thai');
+
+	// Checked before the Latin-run rule below, which would otherwise swallow the
+	// placeholder's own letters and report a less useful reason.
 	if (line.includes('{{') || line.includes('}}')) return fail('unresolved-token');
+
+	if (thaiRatio(line) < MIN_THAI_RATIO) return fail('not-thai');
+
+	// A ratio check alone is too coarse. A live production response scored above the
+	// threshold while still containing "NotNil", a CJK character and "comparisons" —
+	// mostly-Thai gibberish with foreign tokens wedged in. Any CJK/Cyrillic/Hangul is
+	// a decode failure, and a run of Latin letters is a word the model leaked from
+	// its own reasoning; neither belongs in a Thai fortune.
+	if (/[぀-ヿ㐀-䶿一-鿿가-힯Ѐ-ӿ]/u.test(line)) {
+		return fail('foreign-script');
+	}
+	if (/[A-Za-z]{3,}/u.test(line)) return fail('latin-word');
 	if (line.length < MIN_LEN) return fail('too-short');
 	if (line.length > MAX_LEN) return fail('too-long');
 	if (countSentences(line) > 2) return fail('too-many-sentences');
