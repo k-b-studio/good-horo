@@ -28,13 +28,29 @@
 		name="description"
 		content="เว็บดูดวงที่เข้าข้างคุณตั้งแต่คำถามแรก ไม่มีคำเตือน ไม่มีคำขู่ มีแต่ข่าวดี (ถ้าเป็นคุณ)"
 	/>
+	<!-- Absolute URLs: crawlers do not resolve relative paths, and the canonical home
+	     is kbstudio.space even though the app is served from the good-horo project. -->
 	<meta property="og:title" content="ดูดวงเข้าข้าง" />
 	<meta
 		property="og:description"
 		content="หมอดูที่อยู่ข้างคุณเสมอ — ไพ่ 5 ใบ เลือกใบไหนก็ได้ผลดีเหมือนกัน"
 	/>
 	<meta property="og:type" content="website" />
+	<meta property="og:url" content="https://www.kbstudio.space/good-horoscope/" />
+	<meta property="og:site_name" content="kbstudio.space" />
+	<meta property="og:locale" content="th_TH" />
+	<meta property="og:image" content="https://www.kbstudio.space/good-horoscope/og.jpg" />
+	<meta property="og:image:type" content="image/jpeg" />
+	<meta property="og:image:width" content="1200" />
+	<meta property="og:image:height" content="630" />
+	<meta property="og:image:alt" content="ดูดวงเข้าข้าง — หมอดูที่อยู่ข้างคุณเสมอ" />
 	<meta name="twitter:card" content="summary_large_image" />
+	<meta name="twitter:title" content="ดูดวงเข้าข้าง" />
+	<meta
+		name="twitter:description"
+		content="หมอดูที่อยู่ข้างคุณเสมอ — ไพ่ 5 ใบ เลือกใบไหนก็ได้ผลดีเหมือนกัน"
+	/>
+	<meta name="twitter:image" content="https://www.kbstudio.space/good-horoscope/og.jpg" />
 </svelte:head>
 
 <div
