@@ -107,7 +107,7 @@ This is a content decision, not just a safety one — petty is funnier than crue
 - **HEAVEN:** soft gradient sky, cream/gold/pale blue, generous whitespace, rounded serif Thai display face for the reading, slow drifting light particles, gentle chime on reveal. Should feel like a spa.
 - **HELL:** near-black background, ember orange/blood red, tight condensed Thai type, flickering glow, heat-shimmer on the card, screen-shake on flip. Should feel like a threat.
 - The **mode transition** is the app's best moment — spend animation budget there. Heaven blooms open; hell burns in.
-- Include a persistent, small, non-intrusive footer: *"แอปนี้สร้างมาเพื่อความบันเทิง ไม่ใช่คำทำนายจริง"*
+- Include a persistent, small, non-intrusive footer: *"แอปนี้สร้างมาเพื่อความบันเทิง โปรดใช้จักรยานในการรับชม"*
 
 ### Build sequence
 

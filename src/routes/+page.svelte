@@ -108,10 +108,14 @@
 					mode={m.mode}
 					reading={m.reading}
 					chosenId={m.session.chosenCardId}
-					copied={m.copied}
+					rerolling={m.rerolling}
+					sharing={m.sharing}
+					shareResult={m.shareResult}
+					version={m.readingVersion}
 					onReroll={() => m.reroll()}
+					onAnotherCard={() => m.pickAnotherCard()}
 					onRestart={() => m.restart()}
-					onCopy={() => m.copyReading()}
+					onShare={() => m.share()}
 				/>
 			{/if}
 		</div>
@@ -119,7 +123,7 @@
 
 	<footer class="relative z-10 px-4 pb-6 text-center sm:px-6">
 		<p class="text-[0.7rem] text-[var(--ink-muted)]">
-			แอปนี้สร้างมาเพื่อความบันเทิง ไม่ใช่คำทำนายจริง
+			แอปนี้สร้างมาเพื่อความบันเทิง โปรดใช้จักรยานในการรับชม
 		</p>
 	</footer>
 </div>

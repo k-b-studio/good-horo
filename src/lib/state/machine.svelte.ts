@@ -8,9 +8,11 @@
  * fired during steps the user was already going to spend time on.
  */
 
+import { cardsByMode } from '$lib/data/cards';
 import { compose } from '$lib/engine/compose';
 import { requestLine, warmUp, type OracleOutcome } from '$lib/engine/oracle';
 import { NoRepeatPicker } from '$lib/engine/rng';
+import { shareCard, type ShareOutcome } from '$lib/engine/share';
 import type { Affinity, Category, Mode, Reading, Session, Target } from '$lib/engine/types';
 
 export type Step =
@@ -26,6 +28,8 @@ export type OracleState = 'idle' | 'pending' | 'ready' | 'failed' | 'ratelimited
 
 /** Card flip animation. The display deadline sits at the end of it. */
 const FLIP_MS = 1200;
+/** Short beat on re-roll so the new text reads as deliberate rather than a glitch. */
+const REROLL_MS = 450;
 /** Small grace past the flip — warm responses land in 1-3s, so this catches most. */
 const GRACE_MS = 1500;
 /** How long the mode transition holds before the wish prompt. */
@@ -49,7 +53,12 @@ export class Machine {
 	session = $state<Session>(emptySession());
 	reading = $state<Reading | null>(null);
 	oracleState = $state<OracleState>('idle');
-	copied = $state(false);
+	sharing = $state(false);
+	shareResult = $state<ShareOutcome | null>(null);
+	/** True while a re-roll is composing. Stays on RESULT — never returns to the cards. */
+	rerolling = $state(false);
+	/** Bumped per reading so the result screen can replay its reveal animation. */
+	readingVersion = $state(0);
 
 	/** Shared across re-rolls so consecutive readings don't repeat a line. */
 	private picker = new NoRepeatPicker();
@@ -152,20 +161,26 @@ export class Machine {
 			oracleLine: this.oracleLine,
 			picker: this.picker
 		});
+		this.readingVersion += 1;
 		this.step = 'RESULT';
 	}
 
-	/** Same inputs, new text. Re-uses a late oracle line if one arrived meanwhile. */
+	/**
+	 * Same card, same inputs, new text. Deliberately stays on RESULT: switching back
+	 * to the card screen would replay a flip for a card the user never picked this
+	 * time round, which reads as the app choosing for them.
+	 */
 	async reroll(): Promise<void> {
+		if (this.rerolling) return;
+		this.rerolling = true;
 		this.seed = (this.seed * 1664525 + 1013904223) >>> 0;
 		this.variant += 1;
-		this.copied = false;
+		this.shareResult = null;
 
 		const carried = this.oracleLine;
-		this.step = 'FLIPPING';
 		this.fireOracle();
 
-		await sleep(FLIP_MS);
+		await sleep(REROLL_MS);
 		if (this.oracleState === 'pending' && this.inFlight) {
 			await Promise.race([this.inFlight.promise, sleep(GRACE_MS)]);
 		}
@@ -174,7 +189,18 @@ export class Machine {
 			oracleLine: this.oracleLine ?? carried,
 			picker: this.picker
 		});
-		this.step = 'RESULT';
+		this.readingVersion += 1;
+		this.rerolling = false;
+	}
+
+	/** Back to the spread to choose a different card. Nothing is pre-selected. */
+	pickAnotherCard(): void {
+		if (this.rerolling) return;
+		this.session.chosenCardId = null;
+		this.reading = null;
+		this.shareResult = null;
+		this.seed = (this.seed * 1664525 + 1013904223) >>> 0;
+		this.step = 'PICK_CARD';
 	}
 
 	restart(): void {
@@ -185,7 +211,10 @@ export class Machine {
 		this.picker.reset();
 		this.seed = Math.floor(Math.random() * 0xffffffff);
 		this.variant = 0;
-		this.copied = false;
+		this.shareResult = null;
+		this.rerolling = false;
+		this.sharing = false;
+		this.readingVersion = 0;
 		this.reading = null;
 		this.session = emptySession();
 		this.step = 'ASK_TARGET';
@@ -196,15 +225,21 @@ export class Machine {
 		this.inFlight = null;
 	}
 
-	async copyReading(): Promise<void> {
-		if (!this.reading) return;
-		const text = `${this.reading.lines.join('\n')}\n\n— ดูดวงเข้าข้าง / kbstudio.space`;
+	/** Renders the reading to a 1080x1920 JPEG and opens the native share sheet. */
+	async share(): Promise<void> {
+		if (!this.reading || this.sharing) return;
+		this.sharing = true;
 		try {
-			await navigator.clipboard.writeText(text);
-			this.copied = true;
-			setTimeout(() => (this.copied = false), 2000);
-		} catch {
-			// Clipboard can be blocked; the text is on screen either way.
+			const card = cardsByMode[this.mode].find((c) => c.id === this.session.chosenCardId);
+			const outcome = await shareCard({
+				mode: this.mode,
+				reading: this.reading,
+				cardName: card?.name ?? null
+			});
+			this.shareResult = outcome;
+			setTimeout(() => (this.shareResult = null), 2600);
+		} finally {
+			this.sharing = false;
 		}
 	}
 }
