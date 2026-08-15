@@ -112,13 +112,15 @@ for i in 0..<5 {
 	cardX += cardW + gap
 }
 
+// "Good Horo" matches og:title and the kbstudio.space directory label; the Thai line
+// below carries the app's own name and tagline, so the card reads in both languages.
 draw(
-	"ดูดวงเข้าข้าง", "Prompt-Bold", 96, rgb(244, 226, 198),
+	"Good Horo", "Prompt-Bold", 104, rgb(244, 226, 198),
 	cx: W / 2, y: 286, maxWidth: W - 140)
 
 draw(
-	"หมอดูที่อยู่ข้างคุณเสมอ", "IBMPlexSansThai", 38, rgb(178, 150, 122),
-	cx: W / 2, y: 218, maxWidth: W - 200)
+	"ดูดวงเข้าข้าง · หมอดูที่อยู่ข้างคุณเสมอ", "IBMPlexSansThai", 36, rgb(178, 150, 122),
+	cx: W / 2, y: 214, maxWidth: W - 180)
 
 draw(
 	"kbstudio.space/good-horoscope", "Prompt-SemiBold", 27, rgb(226, 138, 60),

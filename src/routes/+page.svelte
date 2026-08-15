@@ -43,7 +43,7 @@
 	<meta property="og:image:type" content="image/jpeg" />
 	<meta property="og:image:width" content="1200" />
 	<meta property="og:image:height" content="630" />
-	<meta property="og:image:alt" content="ดูดวงเข้าข้าง — หมอดูที่อยู่ข้างคุณเสมอ" />
+	<meta property="og:image:alt" content="Good Horo — ดูดวงเข้าข้าง หมอดูที่อยู่ข้างคุณเสมอ" />
 	<meta name="twitter:card" content="summary_large_image" />
 	<meta name="twitter:title" content="Good Horo" />
 	<meta
