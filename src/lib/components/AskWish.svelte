@@ -67,7 +67,7 @@
 		device. The first draft of this app sent nothing anywhere; this one does.
 	-->
 	<p class="mt-1 text-xs text-[var(--ink-muted)]">
-		ข้อความของคุณจะถูกส่งให้ AI ภาษาไทยช่วยแต่งคำทำนาย และไม่ถูกเก็บไว้
+		Gen ผ่าน ThaiLLM ทั้ง 4 โมเดล
 	</p>
 
 	<button
