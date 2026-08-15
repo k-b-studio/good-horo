@@ -1,6 +1,5 @@
 {
 	"$schema": "https://openapi.vercel.sh/vercel.json",
-	"//": "No project-level trailingSlash here, unlike creditgpax/kbstudio-pages. Those are fully static; this project has an API route, and a platform-level trailing-slash rule fights SvelteKit's own endpoint routing — /api/oracle and /api/oracle/ 308 at each other forever, making the endpoint unreachable. SvelteKit already applies trailingSlash: 'always' to pages via +layout.ts.",
 	"redirects": [{ "source": "/", "destination": "/good-horoscope/", "permanent": false }],
 	"headers": [
 		{

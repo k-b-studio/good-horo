@@ -20,6 +20,15 @@ import type { Category, Mode } from '$lib/engine/types';
 
 export const prerender = false;
 
+/**
+ * The root +layout.ts sets trailingSlash: 'always', and page options cascade to
+ * endpoints. That made SvelteKit 308 /api/oracle -> /api/oracle/ while the platform
+ * redirected it back, so the endpoint was unreachable in production and the client
+ * silently fell back to the phrase banks on every request. 'ignore' serves POSTs at
+ * either URL without redirecting — a redirect is never right for an API route.
+ */
+export const trailingSlash = 'ignore';
+
 const UPSTREAM = 'https://thaillm.or.th/api/v1/chat/completions';
 
 /**
