@@ -1,0 +1,128 @@
+/* Prompt (display) + IBM Plex Sans Thai (body) match the kbstudio-pages house faces.
+   Noto Sans Thai Looped is the HEAVEN display face — looped Thai reads softer at
+   large sizes, which is the tonal difference the two modes need. */
+@import '@fontsource/prompt/400.css';
+@import '@fontsource/prompt/600.css';
+@import '@fontsource/prompt/700.css';
+@import '@fontsource/ibm-plex-sans-thai/400.css';
+@import '@fontsource/ibm-plex-sans-thai/500.css';
+@import '@fontsource/ibm-plex-sans-thai/600.css';
+@import '@fontsource/noto-sans-thai-looped/400.css';
+@import '@fontsource/noto-sans-thai-looped/600.css';
+
+@import 'tailwindcss';
+
+/* --- Mode themes -------------------------------------------------------------
+   Every colour, type and texture difference hangs off [data-mode] on the app's
+   own wrapper element — never on <html> or <body>. This is what keeps HELL from
+   leaking into the host page when this app is proxied under kbstudio.space.
+   ---------------------------------------------------------------------------- */
+
+[data-mode] {
+	--ok: #2e8354;
+	--radius-card: 18px;
+	--reading-size: clamp(1.15rem, 1rem + 1.4vw, 1.6rem);
+}
+
+/* Neutral pre-mode state: the two question screens before the mode is resolved. */
+[data-mode='neutral'] {
+	--bg: #f6f6f8;
+	--bg-2: #ffffff;
+	--ink: #23262b;
+	--ink-muted: #6b7280;
+	--accent: #2b6cb0;
+	--accent-ink: #ffffff;
+	--line: #e8e7ec;
+	--card-face: #ffffff;
+	--card-back: linear-gradient(145deg, #2b6cb0, #1d4e82);
+	--glow: transparent;
+	--font-display: 'Prompt', 'IBM Plex Sans Thai', sans-serif;
+	--shadow: 0 1px 3px rgb(16 24 40 / 0.08);
+}
+
+[data-mode='heaven'] {
+	--bg: #fdf8ef;
+	--bg-2: #fffdf8;
+	--ink: #4a3b28;
+	--ink-muted: #8c7a61;
+	--accent: #c99a3f;
+	--accent-ink: #ffffff;
+	--line: #eadfc9;
+	--card-face: #fffdf8;
+	--card-back: linear-gradient(150deg, #f6e3b8, #e3c688);
+	--glow: radial-gradient(70% 55% at 50% 0%, #fdf0d0 0%, transparent 70%);
+	--font-display: 'Noto Sans Thai Looped', 'IBM Plex Sans Thai', sans-serif;
+	--shadow: 0 10px 30px -14px rgb(201 154 63 / 0.45);
+}
+
+[data-mode='hell'] {
+	--bg: #0d0907;
+	--bg-2: #171010;
+	--ink: #f3e3d6;
+	--ink-muted: #a08674;
+	--accent: #e2521f;
+	--accent-ink: #1a0d06;
+	--line: #33211a;
+	--card-face: #1c1210;
+	--card-back: linear-gradient(150deg, #4a1b0c, #1c0d07);
+	--glow: radial-gradient(70% 55% at 50% 0%, #4a1a08 0%, transparent 70%);
+	--font-display: 'Prompt', 'IBM Plex Sans Thai', sans-serif;
+	--shadow: 0 10px 34px -12px rgb(226 82 31 / 0.4);
+}
+
+@theme inline {
+	--font-body: 'IBM Plex Sans Thai', 'Prompt', ui-sans-serif, system-ui, sans-serif;
+	--font-display: var(--font-display);
+
+	--color-bg: var(--bg);
+	--color-bg-2: var(--bg-2);
+	--color-ink: var(--ink);
+	--color-ink-muted: var(--ink-muted);
+	--color-accent: var(--accent);
+	--color-accent-ink: var(--accent-ink);
+	--color-line: var(--line);
+	--color-card-face: var(--card-face);
+}
+
+html {
+	background-color: #0d0907;
+}
+
+body {
+	margin: 0;
+	font-family: var(--font-body);
+	-webkit-font-smoothing: antialiased;
+	text-rendering: optimizeLegibility;
+}
+
+.font-display {
+	font-family: var(--font-display);
+}
+
+/* Thai tone marks and stacked vowels clip at large sizes with tight leading.
+   1.65 is the smallest ratio that cleared ไม้โท over สระอิ in testing. */
+.reading {
+	font-size: var(--reading-size);
+	line-height: 1.65;
+}
+
+::selection {
+	background: var(--accent);
+	color: var(--accent-ink);
+}
+
+/* --- Motion ------------------------------------------------------------------
+   Shake, flicker and particles are decoration; the flow must stay usable without
+   them. Everything below collapses to a plain cross-fade under reduced-motion.
+   ---------------------------------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+	*,
+	*::before,
+	*::after {
+		animation-duration: 0.01ms !important;
+		animation-iteration-count: 1 !important;
+		transition-duration: 0.01ms !important;
+		scroll-behavior: auto !important;
+	}
+}
